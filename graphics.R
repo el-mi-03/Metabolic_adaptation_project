@@ -1,8 +1,10 @@
-library("tidyverse")
+library(tidyverse)
 library(readxl)
-install.packages("readxl")
-install.packages("xlsx")
-install.packages("XLConnect")
-library(XLConnect)
-
-data <- read_excel("22_12_22_merged_table.xlsx")
+library(dplyr)
+library(here)
+data <- as_tibble(read_excel("22_12_22_merged_table.xlsx"))
+c <- colnames(data)
+c <- c[!c == "Cycle Nr."]
+c <- c[!c == "Time [s]"]
+data %>% 
+  pivot_longer(c, names_to = "Carbon_source", values_to = "OD")
