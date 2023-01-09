@@ -19,10 +19,13 @@ data <- data %>%
     c("carbon_soucre","concentration,mM",NA,"TM concentration","replica"),
     "_"
   )
-
+#making table nicer
 data <- data[ ,2:7]
 colnames(data) <- c("Time", "carbon_source", "cs_concentration_mM", "TM_concentration","replica","OD")
 data$cs_and_conc <- paste(data$carbon_source, "_", data$cs_concentration_mM)
+data$Time <- round(data$Time/3600)
+
+#plotting the data
 p <- ggplot(data = data, aes(x = Time, y = OD, group = interaction(carbon_source, cs_concentration_mM))) +
   geom_line(aes(color = cs_and_conc), linewidth = 1, stat = "summary", fun = mean) +
   geom_errorbar(stat = "summary", fun.data = function(x) {
