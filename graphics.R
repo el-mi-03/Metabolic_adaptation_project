@@ -19,3 +19,9 @@ data <- data %>%
     c("carbon_soucre","concentration,mM",NA,"TM concentration","replica"),
     "_"
   )
+data <- data[ ,2:7]
+colnames(data) <- c("Time", "carbon_source", "cs_concentration_mM", "TM_concentration","replica","OD")
+
+p <- ggplot(data = data, aes(x = Time, y = OD, group = interaction(carbon_source, cs_concentration_mM))) +
+  geom_line(aes(linetype = cs_concentration_mM), linewidth = 1) + facet_grid(carbon_source~TM_concentration)
+print(p)
