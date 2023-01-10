@@ -1,7 +1,7 @@
 int <- function(name){
     t <- data_old[,c("Time [s]",name)]
     colnames(t) <- c("time","values")
-  x <- integrate(approxfun(t$time, t$values), 1, 12)
+  x <- integrate(approxfun(t$time, t$values), 1, 12)$val
   return(x)
 }
 
