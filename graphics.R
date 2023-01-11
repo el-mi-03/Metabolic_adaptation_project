@@ -43,7 +43,12 @@ p <- ggplot(data = data, aes(x = Time, y = OD, group = interaction(carbon_source
   }, width = 0.1) + facet_grid(carbon_source~TM_concentration)
 print(p)
 
+#counting AUC's for all my curves
 table_fin <- data.frame(matrix(nrow = length(c), ncol = 2))
 colnames(table_fin) <- c("conditions","AUC")
 table_fin$conditions <- c
 table_fin$AUC <- lapply(table_fin$conditions, FUN = int)
+
+#exporting the final table
+table_fin$AUC <- unlist(table_fin$AUC)
+write.table(table_fin, file = "AUC_for_22_12_22", sep = ",", quote = FALSE, row.names = F)
