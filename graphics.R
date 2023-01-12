@@ -14,6 +14,11 @@ library(here)
 data <- as_tibble(read_excel("22_12_22_merged_table.xlsx"))
 data <- na.omit(data)
 data$`Time [s]` <- round(data$`Time [s]`/3600)
+for (col in 2:length(colnames(data))){
+  data[col] <-  data[col]*2
+}
+
+
 data_old <- data
 c <- colnames(data)
 c <- c[!c == "Cycle Nr."]
