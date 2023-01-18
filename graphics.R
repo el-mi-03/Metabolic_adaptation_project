@@ -10,8 +10,9 @@ library(tidyverse)
 library(readxl)
 library(dplyr)
 library(here)
+data_name <- "22_12_22_merged_table"
+data <- as_tibble(read_excel(paste0(data_name, ".xlxs")))
 
-data <- as_tibble(read_excel("22_12_22_merged_table.xlsx"))
 data <- na.omit(data)
 data$`Time [s]` <- round(data$`Time [s]`/3600)
 for (col in 2:length(colnames(data))){
@@ -46,7 +47,10 @@ p <- ggplot(data = data, aes(x = Time, y = OD, group = interaction(carbon_source
   geom_errorbar(stat = "summary", fun.data = function(x) {
     data.frame(ymin = mean(x) - sd(x), ymax = mean(x) + sd(x))
   }, width = 0.1) + facet_grid(carbon_source~TM_concentration)
+
+ggsave(paste0("Growth curves_", data_name,".png"),path = "H:/Liza/A.baylyi_other_data/", width = 5, height = 5, device='png', dpi=700)
 print(p)
+
 
 #counting AUC's for all my curves
 table_fin <- data.frame(matrix(nrow = length(c), ncol = 2))
@@ -56,4 +60,4 @@ table_fin$AUC <- lapply(table_fin$conditions, FUN = int)
 
 #exporting the final table
 table_fin$AUC <- unlist(table_fin$AUC)
-write.table(table_fin, file = "AUC_for_22_12_22", sep = ",", quote = FALSE, row.names = F)
+write.table(table_fin, paste0("AUC_", data_name), sep = ",", quote = FALSE, row.names = F)
