@@ -21,14 +21,14 @@ pivot_my_table <- function(data){
       "_"
     )
   #making table nicer
-  data <- data[ ,2:7]
+  #data <- data[ ,2:7]
   colnames(data) <- c("Time", "carbon_source", "cs_concentration_mM", "TM_concentration","replica","OD")
   data$cs_and_conc <- paste(data$carbon_source,"_",data$cs_concentration_mM)
   return(data)
   
 }
 #function which creates plot and save it into the home directory
-create_my_plot <- function(data){
+create_my_plot <- function(data, data_name){
   p <- ggplot(data = data, aes(x = Time, y = OD, group = interaction(carbon_source, cs_concentration_mM))) +
     geom_line(aes(color = cs_and_conc), linewidth = 1, stat = "summary", fun = mean) +
     geom_errorbar(stat = "summary", fun.data = function(x) {
@@ -44,19 +44,25 @@ library(tidyverse)
 library(readxl)
 library(dplyr)
 library(here)
-data_name <- "22_12_22_merged_table"
+data_name <- "3_11_23_merged_table"
 data <- as_tibble(read_excel(paste0(data_name, ".xlsx")))
 
 data <- na.omit(data)
-data$`Time [s]` <- round(data$`Time [s]`/3600)
+#data$`Time [s]` <- round(data$`Time [s]`/3600)
 for (col in 2:length(colnames(data))){
   data[col] <-  data[col]*2
 }
-
+c <- colnames(data)
+c <- c[!c == "Cycle Nr."]
+c <- c[!c == "Time [s]"]
 data_old <- data
-
+#data_contr <- cbind(data[ ,"Time [s]"], data[ ,grep(("contr"), colnames(data))])
+#data <- cbind(data[ ,"Time [s]"], data[ ,grep(("TM"), colnames(data))])
+#data_contr <- pivot_my_table(data_contr)
 data <- pivot_my_table(data)
-create_my_plot(data)
+#name2 <- paste0("control", data_name)
+create_my_plot(data, data_name)
+#create_my_plot(data_contr, name2)
 
 #counting AUC's for all my curves
 table_fin <- data.frame(matrix(nrow = length(c), ncol = 2))
