@@ -18,7 +18,10 @@ data <- data %>% pivot_wider(names_from = replica, values_from = AUC)
 data$mean_AUC <- (data$`1`+data$`2`)/2
 data_for_heatmap <- data[c(1,2,5)]
 data_for_heatmap <- data_for_heatmap %>% pivot_wider(names_from = TM_conc, values_from = mean_AUC)
-data_for_heatmap <- data.matrix(data_for_heatmap, rownames.force = NA)
-heatmap(as.matrix(data_for_heatmap))  
+#data_for_heatmap[,2:3] <- sapply(data_for_heatmap[,2:3],fun = as.numeric(sub(",", "\\.", x)))
+
+data_for_heatmap <- data.frame(data_for_heatmap, row.names = 1)
+data_for_heatmap <- data.matrix(data_for_heatmap)
+heatmap(data_for_heatmap)
 
         
