@@ -26,4 +26,7 @@ data_for_heatmap <- data[c(1,2,5)]
 #heatmap(data_for_heatmap)
 ggplot(data_for_heatmap, mapping = aes(x = TM_conc, y = Carbon_source, fill = mean_AUC))+
   geom_tile()+scale_fill_gradient(high = "orange", low = "blue")
-        
+
+ggsave(paste0("Heatmap_for_", data_name,".png"),
+       path = "H:/Liza/A.baylyi_other_data/", width = 5, 
+       height = 5, device='png', dpi=700)        
